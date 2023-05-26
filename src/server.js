@@ -12,7 +12,9 @@ const notFoundHandler = require('./error-handlers/404');
 const authRoutes = require('./auth/authRoutes.js');
 const v1Routes = require('./routes/v1');
 const v2Routes = require('./routes/v2');
-const v3Routes = require('./routes/v3');
+// const v3Routes = require('./routes/v3');
+// const v4Routes = require('./data/decks.json');
+
 // const cardRoutes = require("./routes/api/myTabRoutes"); 
 
 // Create an instance of express
@@ -20,14 +22,16 @@ const app = express();
 
 
 
-// v1Routes handle CRUD for 'cards' and 'clothes' models
+// v1Routes handle CRUD for 'cards' and 'decks' models
 app.use('/api/v1', v1Routes)
+// app.use('/api/decks', v1Routes)
+// app.use('/api/v4', v4Routes)
 
 
 // Allow the app to use CORS (Cross Origin Resource Sharing) to enable interaction with other websites
 app.use(cors());
 // app.use(morgan('dev'));
-app.use('/api/v7', v3Routes)
+// app.use('/api/v7', v3Routes)
 
 // Process JSON input and put the data on req.body for further handling
 app.use(express.json());
