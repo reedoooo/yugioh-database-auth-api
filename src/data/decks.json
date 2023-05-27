@@ -1,0 +1,57 @@
+{
+    "decks": [
+      {
+        "id": 1,
+        "name": "Deck 1",
+        "description": "This is deck 1",
+        "author": "John Doe",
+        "createdAt": "2022-01-01T10:00:00Z",
+        "updatedAt": "2022-01-01T12:00:00Z",
+        "cards": [
+          {
+            "id": 1,
+            "title": "Card 1",
+            "content": "This is card 1 for deck 1",
+            "createdAt": "2022-01-01T10:01:00Z",
+            "updatedAt": "2022-01-01T10:02:00Z",
+            "deckId": 1
+          },
+          {
+            "id": 2,
+            "title": "Card 2",
+            "content": "This is card 2 for deck 1",
+            "createdAt": "2022-01-01T10:03:00Z",
+            "updatedAt": "2022-01-01T10:04:00Z",
+            "deckId": 1
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Deck 2",
+        "description": "This is deck 2",
+        "author": "Jane Smith",
+        "createdAt": "2022-02-01T09:00:00Z",
+        "updatedAt": "2022-02-01T11:00:00Z",
+        "cards": [
+          {
+            "id": 3,
+            "title": "Card 1",
+            "content": "This is card 1 for deck 2",
+            "createdAt": "2022-02-01T09:01:00Z",
+            "updatedAt": "2022-02-01T09:02:00Z",
+            "deckId": 2
+          },
+          {
+            "id": 4,
+            "title": "Card 2",
+            "content": "This is card 2 for deck 2",
+            "createdAt": "2022-02-01T09:03:00Z",
+            "updatedAt": "2022-02-01T09:04:00Z",
+            "deckId": 2
+          }
+        ]
+      }
+    ]
+  }
+  

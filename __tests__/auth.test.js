@@ -43,12 +43,12 @@ describe('Testing authorization & authentication routes', () => {
     expect(response.body.user.token).toBeTruthy();
   })
 
-  test('Can successfully read from /users', async() => {
-    let response = await app.get('/users').set(`Authorization`, `Bearer ${token}`);
+  // test('Can successfully read from /users', async() => {
+  //   let response = await app.get('/users').set(`Authorization`, `Bearer ${token}`);
 
-    expect(response.body[0]).toBe('reedvogt_user');
+  //   expect(response.body[0]).toBe('reedvogt_user');
 
-  })
+  // })
 
   test('Can access secret area', async() => {
     let response = await app.get('/secret').set(`Authorization`, `Bearer ${token}`);

@@ -12,26 +12,30 @@ authRouter.post('/signup', async (req, res, next) => {
   try {
     let userRecord = await users.create(req.body);
     const output = {
+      username: userRecord.username, // Add the username to the output
       user: userRecord,
       token: userRecord.token
     };
     res.status(201).json(output);
   } catch (e) {
-    next(e.message)
+    next(e.message);
   }
 });
 
+
 authRouter.post('/signin', basicAuth, (req, res, next) => {
   const user = {
+    username: req.user.username, // Add the username to the user object
     user: req.user,
     token: req.user.token
   };
   res.status(200).json(user);
 });
 
+
 authRouter.get('/users', bearerAuth, permissions('delete'), async (req, res, next) => {
   const userRecords = await users.findAll({});
-  const list = userRecords.map(user => user.username);
+  const list = userRecords.map(user => user);
   res.status(200).json(list);
 });
 

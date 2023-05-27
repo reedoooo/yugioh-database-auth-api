@@ -22,6 +22,7 @@ module.exports = async (req, res, next) => {
   }
 
   function _authError() {
-    next('Invalid Login');
+    res.status(401).json({ message: 'Your request was received, but you are not authorized' });
+    // next('Invalid Login')
   }
 }
