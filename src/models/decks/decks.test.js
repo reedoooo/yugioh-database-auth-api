@@ -1,33 +1,67 @@
-// Importing dependencies
-const { expect } = require('chai');
-const SequelizeMock = require('sequelize-mock');
+const { Sequelize, DataTypes } = require("sequelize");
+const deckModel = require("./model.js");
 
-// Setting up the mock database
-const DBConnectionMock = new SequelizeMock();
+// Create a test database connection
+const sequelize = new Sequelize("sqlite::memory:");
 
-// Mocking the Deck Model
-const DeckModelMock = DBConnectionMock.define('Deck', {
-    name: 'Test Deck',
-    description: 'This is a test deck',
-    author: 'Test Author',
-    createdAt: '2023-05-26',
-    updatedAt: '2023-05-26',
-});
+describe("Deck Model", () => {
+  // Initialize the model with the test database connection
+  const Deck = deckModel(sequelize, DataTypes);
 
-// Writing the tests
-describe('Deck Model', () => {
-    it('should have a name', async () => {
-        let deck = await DeckModelMock.findOne({ where: { name: 'Test Deck' } });
-        expect(deck.name).to.equal('Test Deck');
-    });
+  // Run before each test
+  beforeEach(async () => {
+    // Sync the model with the database to create the table
+    await sequelize.sync({ force: true });
+  });
 
-    it('should have a description', async () => {
-        let deck = await DeckModelMock.findOne({ where: { name: 'Test Deck' } });
-        expect(deck.description).to.equal('This is a test deck');
-    });
+  // Run after all tests
+  afterAll(async () => {
+    // Close the database connection
+    await sequelize.close();
+  });
 
-    it('should have an author', async () => {
-        let deck = await DeckModelMock.findOne({ where: { name: 'Test Deck' } });
-        expect(deck.author).to.equal('Test Author');
-    });
+  it("should create a new deck", async () => {
+    // Create a new deck
+    const deckData = {
+      name: "Test Deck",
+      description: "Test Deck Description",
+      author: "Test Author",
+    };
+    const deck = await Deck.create(deckData);
+
+    // Assertion
+    expect(deck).toBeDefined();
+    expect(deck.name).toEqual(deckData.name);
+    expect(deck.description).toEqual(deckData.description);
+    expect(deck.author).toEqual(deckData.author);
+  });
+
+  it("should associate a deck with cards", async () => {
+    // Create a new deck
+    const deckData = {
+      name: "Test Deck",
+      description: "Test Deck Description",
+      author: "Test Author",
+    };
+    const deck = await Deck.create(deckData);
+    console.log("deck", deck)
+    // Create some cards
+    const cardData1 = { title: "Card 1", deckId: deck.id };
+    const cardData2 = { title: "Card 2", deckId: deck.id };
+    console.log("cardData1", cardData1);
+    await deck.createCards(cardData1);
+    await deck.createCards(cardData2);
+
+    // Get the associated cards
+    const cards = await deck.getCards();
+
+    // Assertion
+    expect(cards).toHaveLength(2);
+    expect(cards[0].title).toEqual(cardData1.title);
+    expect(cards[0].deckId).toEqual(deck.id);
+    expect(cards[1].title).toEqual(cardData2.title);
+    expect(cards[1].deckId).toEqual(deck.id);
+  });
+
+  // Add more tests as needed
 });

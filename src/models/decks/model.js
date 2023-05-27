@@ -1,8 +1,9 @@
 "use strict";
 
 const deckModel = (sequelize, DataTypes) => {
-    console.log('accessed deck model')
+    console.log('accessed deck model', )
   const Deck = sequelize.define(
+
     "Deck",
     {
       name: {

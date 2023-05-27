@@ -23,7 +23,6 @@ const app = express();
 
 
 // v1Routes handle CRUD for 'cards' and 'decks' models
-app.use('/api/v1', v1Routes)
 // app.use('/api/decks', v1Routes)
 // app.use('/api/v4', v4Routes)
 
@@ -32,6 +31,7 @@ app.use('/api/v1', v1Routes)
 app.use(cors());
 // app.use(morgan('dev'));
 // app.use('/api/v7', v3Routes)
+app.use('/api/v1', v1Routes)
 
 // Process JSON input and put the data on req.body for further handling
 app.use(express.json());

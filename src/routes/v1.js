@@ -21,9 +21,10 @@ router.put('/:model/:id', handleUpdate);
 router.delete('/:model/:id', handleDelete);
 
 async function handleGetAll(req, res) {
-  console.log('accessed get all');
+  console.log('accessed get all', req.model);
 
   let allRecords = await req.model.get();
+  console.log('accessed get all 11', allRecords)
   res.status(200).json(allRecords);
 }
 
@@ -34,8 +35,11 @@ async function handleGetOne(req, res) {
 }
 
 async function handleCreate(req, res) {
-  console.log('accessed create')
+  console.log('accessed create 37', req.body)
+  console.log('accessed create 38', req.model)
+
   let obj = req.body;
+  console.log('accessed create 41', obj)
   let newRecord = await req.model.create(obj);
   res.status(201).json(newRecord);
 }

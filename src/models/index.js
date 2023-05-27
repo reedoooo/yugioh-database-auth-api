@@ -12,10 +12,9 @@ const Collection = require("./data-collection.js");
 const DATABASE_URL = process.env.DATABASE_URL || "sqlite:memory:";
 
 const sequelize = new Sequelize(DATABASE_URL);
-
+console.log('sequelize', sequelize)
 const cards = cardModel(sequelize, DataTypes);
 const decks = deckModel(sequelize, DataTypes);
-
 
 module.exports = {
 
