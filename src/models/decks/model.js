@@ -1,43 +1,38 @@
 "use strict";
 
 const deckModel = (sequelize, DataTypes) => {
-    console.log('accessed deck model', )
   const Deck = sequelize.define(
-
     "Deck",
     {
+      id: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
+    //   userID: {
+    //     type: DataTypes.INTEGER,
+    //     allowNull: false,
+    //   },
       description: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: true,
       },
       author: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: "created_at",
-        defaultValue: DataTypes.NOW,
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: "updated_at",
-        defaultValue: DataTypes.NOW,
+      cards: {
+        type: DataTypes.JSON,
+        allowNull: true,
       },
     },
     {
-      // Define associations
-      associate: (models) => {
-        // Associate Deck with Cards model
-        Deck.hasMany(models.Cards, {
-          foreignKey: "deckId",
-          as: "cards",
-        });
-      },
+      timestamps: false,
     }
   );
 
