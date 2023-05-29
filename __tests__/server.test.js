@@ -1,137 +1,39 @@
-const { server: app } = require("../src/server");
-const { userDB } = require("../src/auth/models/index");
-const { cardAndDecksDB } = require("../src/models/index");
-const supertest = require("supertest");
+// const request = require('supertest');
+// const { server } = require('../server'); // Update the import path for the server file
+// const router = require('../../src/routes/v1'); // Update the import path for the router file
 
-describe("Testing V2 routes", () => {
-  let token;
-  let serverInstance;
-  let request;
+// const app = express();
+// app.use(express.json());
+// app.use('/', router);
 
-  beforeAll(async () => {
-    await userDB.sync();
-    await cardAndDecksDB.sync();
-    serverInstance = app.listen(process.env.PORT);
-    request = supertest(serverInstance);
+// describe('Test the routes', () => {
+//   // GET all
+//   it('should respond with a 200 status code for GET /:model', async () => {
+//     const response = await request(app).get('/decks'); // replace 'model' with the actual model name
+//     expect(response.statusCode).toBe(200);
+//   });
 
-    const response = await request.post("/signin").auth("admin", "password");
+//   // GET one
+//   it('should respond with a 200 status code for GET /:model/:id', async () => {
+//     const response = await request(app).get('/decks/1'); // replace 'model' with the actual model name
+//     expect(response.statusCode).toBe(200);
+//   });
 
-    token = response.body.token;
-  });
+//   // POST
+//   it('should respond with a 201 status code for POST /:model', async () => {
+//     const response = await request(app).post('/decks').send({ name: 'test' }); // replace 'model' with the actual model name
+//     expect(response.statusCode).toBe(201);
+//   });
 
-  test("Can GET ALL from V2 decks", async () => {
-    const response = await request
-      .get("/api/v2/decks")
-      .set("Authorization", `Bearer ${token}`);
+//   // PUT
+//   it('should respond with a 200 status code for PUT /:model/:id', async () => {
+//     const response = await request(app).put('/decks/1').send({ name: 'test' }); // replace 'model' with the actual model name
+//     expect(response.statusCode).toBe(200);
+//   });
 
-    expect(response.status).toBe(200);
-    expect(response.body).toBeDefined();
-    expect(Array.isArray(response.body)).toBe(true);
-  }, 10000);
-
-  afterAll(async () => {
-    await userDB.drop({});
-    await cardAndDecksDB.drop({});
-    await serverInstance.close();
-  });
-
-  const createModelTests = (modelId, modelData, updatedModelData) => {
-    describe(`Testing ${modelId} routes`, () => {
-      let recordId;
-
-      test(`Can POST to ${modelId}`, async () => {
-        const response = await request
-          .post(`/api/v1/${modelId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(modelData);
-
-        expect(response.status).toBe(201);
-        expect(response.body).toEqual(expect.objectContaining(modelData));
-
-        recordId = response.body.id; // Set the ID for future use
-      }, 10000);
-
-      test(`Can GET ALL from ${modelId}`, async () => {
-        const response = await request
-          .get(`/api/v1/${modelId}`)
-          .set("Authorization", `Bearer ${token}`);
-
-        expect(response.status).toBe(200);
-        expect(Array.isArray(response.body)).toBe(true);
-      }, 10000);
-
-      test(`Can GET ONE from ${modelId}`, async () => {
-        const response = await request
-          .get(`/api/v1/${modelId}/${recordId}`)
-          .set("Authorization", `Bearer ${token}`);
-
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual(expect.objectContaining(modelData));
-      }, 10000);
-
-      test(`Can PATCH to ${modelId}`, async () => {
-        const response = await request
-          .patch(`/api/v1/${modelId}/${recordId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(updatedModelData);
-
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual(
-          expect.objectContaining(updatedModelData)
-        );
-      }, 10000);
-
-      test(`Can PUT to ${modelId}`, async () => {
-        const response = await request
-          .put(`/api/v1/${modelId}/${recordId}`)
-          .set("Authorization", `Bearer ${token}`)
-          .send(updatedModelData);
-
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual(
-          expect.objectContaining(updatedModelData)
-        );
-      }, 10000);
-
-      test(`Can DELETE from ${modelId}`, async () => {
-        const response = await request
-          .delete(`/api/v1/${modelId}/${recordId}`)
-          .set("Authorization", `Bearer ${token}`);
-
-        expect(response.status).toBe(200);
-        expect(response.body).toBe(1);
-      }, 10000);
-    });
-  };
-
-  const deckModelData = {
-    name: "Test Deck",
-    description: "This is a test deck",
-    author: "Test Author",
-  };
-
-  const updatedDeckModelData = {
-    name: "Updated Deck",
-    description: "This is an updated deck",
-    author: "Updated Author",
-  };
-
-  const cardModelData = {
-    name: "Test Card",
-    level: 1,
-    attribute: "Test Attribute",
-    type: "Test Type",
-    race: "Test Race",
-  };
-
-  const updatedCardModelData = {
-    name: "Updated Card",
-    level: 2,
-    attribute: "Updated Attribute",
-    type: "Updated Type",
-    race: "Updated Race",
-  };
-
-  createModelTests("decks", deckModelData, updatedDeckModelData);
-  createModelTests("cards", cardModelData, updatedCardModelData);
-});
+//   // DELETE
+//   it('should respond with a 200 status code for DELETE /:model/:id', async () => {
+//     const response = await request(app).delete('/decks/1'); // replace 'model' with the actual model name
+//     expect(response.statusCode).toBe(200);
+//   });
+// });

@@ -1,10 +1,7 @@
-'use strict'
-
-const server = require('../src/server');
+const request = require('supertest');
+const { server } = require('../src/server');
 const base64 = require('base-64');
-const { userDB, users } = require('../src/auth/models/index');
-const supertest = require('supertest');
-const app = supertest(server.server)
+const { userDB } = require('../src/auth/models/index');
 
 let userInfo = {
   username: 'reedvogt_user',
@@ -23,37 +20,39 @@ afterAll(async () => {
 });
 
 describe('Testing authorization & authentication routes', () => {
+  const app = request(server);
 
-  test('Can successfully sign up a new user', async() => {
-    let response = await app.post('/signup').send(userInfo);
+  test('Can successfully sign up a new user', async () => {
+    const response = await app.post('/signup').send(userInfo);
 
-    expect(response.body.user.username).toEqual('reedvogt_user');
-    expect(response.body.user.role).toEqual('admin');
-  })
+    expect(response.statusCode).toBe(201);
+    expect(response.body.user.username).toEqual(userInfo.username);
+    expect(response.body.user.role).toEqual(userInfo.role);
+  });
 
-  test('Can successfully sign in as an existing user', async() => {
-    let encodedCredentials = base64.encode(`${userInfo.username}:${userInfo.password}`);
+  test('Can successfully sign in as an existing user', async () => {
+    const encodedCredentials = base64.encode(`${userInfo.username}:${userInfo.password}`);
+    const response = await app.post('/signin').set('Authorization', `Basic ${encodedCredentials}`);
 
-    let response = await app.post('/signin').set(`Authorization`, `Basic ${encodedCredentials}`);
-
-    token = response.body.user.token;
-
-    expect(response.body.user.username).toEqual('reedvogt_user');
-    expect(response.body.user.role).toEqual('admin');
+    expect(response.statusCode).toBe(200);
+    expect(response.body.user.username).toEqual(userInfo.username);
+    expect(response.body.user.role).toEqual(userInfo.role);
     expect(response.body.user.token).toBeTruthy();
-  })
+    token = response.body.user.token;
+  });
 
-  // test('Can successfully read from /users', async() => {
-  //   let response = await app.get('/users').set(`Authorization`, `Bearer ${token}`);
+  test('Can successfully read from /users', async () => {
+    const response = await app.get('/users').set('Authorization', `Bearer ${token}`);
 
-  //   expect(response.body[0]).toBe('reedvogt_user');
+    expect(response.statusCode).toBe(200);
+    expect(response.body.length).toBeGreaterThan(0);
+    // Add more specific assertions based on the response structure and expected data
+  });
 
-  // })
+  test('Can access secret area', async () => {
+    const response = await app.get('/secret').set('Authorization', `Bearer ${token}`);
 
-  test('Can access secret area', async() => {
-    let response = await app.get('/secret').set(`Authorization`, `Bearer ${token}`);
-    expect(response.text).toBe('Welcome to the secret area')
-    // expect(response.text.trim()).toBe('Welcome to the secret area');
-  })
-  
-})
+    expect(response.statusCode).toBe(200);
+    expect(response.text).toBe('Welcome to the secret area');
+  });
+});
