@@ -1,0 +1,31 @@
+{
+  "development": {
+    "username": "reedvogt_user",
+    "password": "pfzpgwLIbBGvg1atltIDU34Ea3wwxOQQ",
+    "database": "reedvogt",
+    "host": "dpg-chijof2k728hm244594g-a.oregon-postgres.render.com",
+    "port": 5432,
+    "dialect": "postgres",
+    "ssl": true,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
