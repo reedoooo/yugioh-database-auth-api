@@ -14,10 +14,14 @@ const deckModel = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-    //   userID: {
-    //     type: DataTypes.INTEGER,
-    //     allowNull: false,
-    //   },
+      userID: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+      },
+      deckID: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       description: {
         type: DataTypes.STRING,
         allowNull: true,
