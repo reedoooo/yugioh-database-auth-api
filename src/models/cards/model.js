@@ -17,9 +17,6 @@ const CardModel = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      // desc: {
-      //   type: DataTypes.STRING, // Update the property name here
-      // },
       description: {
         type: DataTypes.STRING,
         allowNull: true,

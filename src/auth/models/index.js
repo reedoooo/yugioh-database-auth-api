@@ -2,12 +2,17 @@
 
 const userSchema = require('./users.js');
 const { Sequelize, DataTypes } = require('sequelize');
+const config = require('../../../config/config.json');
 
-const DATABASE_URL = process.env.DATABASE_URL || 'sqlite:testmemory;';
-
-const sequelize = new Sequelize(DATABASE_URL);
+// Use the configuration from config/config.json
+const { username, password, database, host, dialect, dialectOptions } = config.development;
+const sequelize = new Sequelize(database, username, password, {
+  host: host,
+  dialect: dialect,
+  dialectOptions: dialectOptions,
+});
 
 module.exports = {
   userDB: sequelize,
   users: userSchema(sequelize, DataTypes),
-}
+};
